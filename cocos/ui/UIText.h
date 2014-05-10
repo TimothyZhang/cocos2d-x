@@ -131,6 +131,10 @@ public:
 
     const Size& getTextAreaSize();
 
+    virtual void setSize(const Size &size) override;
+
+    virtual void ignoreContentAdaptWithSize(bool ignore) override;
+
     void setTextHorizontalAlignment(TextHAlignment alignment);
 
     TextHAlignment getTextHorizontalAlignment();

@@ -147,7 +147,11 @@ const std::string& Text::getFontName()
 
 void Text::setTextAreaSize(const Size &size)
 {
-    _labelRenderer->setDimensions(size.width,size.height);
+    if( size.height<= 1) {
+        _labelRenderer->setDimensions(size.width,0);
+    } else {
+        _labelRenderer->setDimensions(size.width,size.height);
+    }
     updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
     _labelRendererAdaptDirty = true;
 }
@@ -265,11 +269,28 @@ Node* Text::getVirtualRenderer()
     return _labelRenderer;
 }
 
+void Text::setSize(const Size &size) {
+    if( size.height <= 1 ){ 
+        _labelRenderer->setDimensions(size.width, 0);
+        _ignoreSize = true;
+    }
+    Widget::setSize(size);
+}
+
+void Text::ignoreContentAdaptWithSize(bool ignore) {
+    if( _ignoreSize && _labelRenderer->getDimensions().width > 1 ) {
+        return;
+    }
+    Widget::ignoreContentAdaptWithSize(ignore);
+}
+
 void Text::labelScaleChangedWithSize()
 {
     if (_ignoreSize)
     {
-        _labelRenderer->setDimensions(0,0);
+        if( _labelRenderer->getDimensions().width <= 1 ){
+            _labelRenderer->setDimensions(0,0);
+        }
         _labelRenderer->setScale(1.0f);
         _normalScaleValueX = _normalScaleValueY = 1.0f;
     }
