@@ -1561,6 +1561,10 @@ public:
     unsigned short getCameraMask() const { return _cameraMask; }
     void setCameraMask(unsigned short mask, bool applyChildren = true);
 
+    std::string getDestroyEventName() const;
+    void enabledDestroyEvent(bool enabled) { _destroyEventEnabled = enabled; }
+    bool isDestroyEventEnabled() const { return _destroyEventEnabled; }
+
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
     Node();
@@ -1711,6 +1715,7 @@ protected:
     std::function<void()> _onEnterTransitionDidFinishCallback;
     std::function<void()> _onExitTransitionDidStartCallback;
 
+    bool        _destroyEventEnabled;
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Node);
     

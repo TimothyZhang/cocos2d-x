@@ -130,6 +130,7 @@ Node::Node(void)
 , _name("")
 , _hashOfName(0)
 , _cameraMask(1)
+, _destroyEventEnabled(false)
 {
     // set default scheduler and actionManager
     Director *director = Director::getInstance();
@@ -204,6 +205,10 @@ Node::~Node()
 
     CCASSERT(!_running, "Node still marked as running on node destruction! Was base class onExit() called in derived class onExit() implementations?");
     CC_SAFE_RELEASE(_eventDispatcher);
+
+    if( _destroyEventEnabled ) {
+        cocos2d::Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(getDestroyEventName());
+    }
 }
 
 bool Node::init()
@@ -2268,6 +2273,10 @@ void Node::setCameraMask(unsigned short mask, bool applyChildren)
 __NodeRGBA::__NodeRGBA()
 {
     CCLOG("NodeRGBA deprecated.");
+}
+
+std::string Node::getDestroyEventName() const {	
+    return cocos2d::StringUtils::format("cocos2d-node-destroyed-%ud", _ID);	
 }
 
 NS_CC_END
